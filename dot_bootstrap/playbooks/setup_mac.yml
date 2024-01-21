@@ -1,0 +1,67 @@
+---
+- name: Running Mac Os setup
+  hosts: localhost
+  vars:
+      fonts_dir: "~/Library/Fonts"
+      packages:
+        - git
+        - docker
+        - fd
+        - ripgrep
+        - neovim
+        - powerlevel10k
+      casks:
+        - spotify
+        - firefox
+        - rectangle
+        - warp
+        - dropbox
+  tasks:
+    - name: Create font directory if it does not exist
+      file:
+        path: "{{ fonts_dir }}"
+        state: directory
+      when: ansible_os_family == 'Darwin'
+
+    - name: Download MesloLGS font files for Powerlevel10k
+      get_url:
+        url: "{{ item.url }}"
+        dest: "{{ fonts_dir }}/{{ item.name }}"
+        force: no
+      loop:
+        - { url: "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf", name: "MesloLGS NF Regular.ttf" }
+        - { url: "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf", name: "MesloLGS NF Bold.ttf" }
+        - { url: "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf", name: "MesloLGS NF Italic.ttf" }
+        - { url: "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf", name: "MesloLGS NF Bold Italic.ttf" }
+      when: ansible_os_family == 'Darwin'
+
+    - name: Check if Homebrew is installed
+      command: brew --version
+      register: brew_installed
+      failed_when: false
+      changed_when: false
+
+    - name: Install Homebrew
+      command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      when: brew_installed is failed
+
+    - name: Install Homebrew packages
+      community.general.homebrew:
+        name: "{{ packages }}"
+        state: present
+      when: ansible_os_family == 'Darwin'
+
+    - name: Install Homebrew casks
+      homebrew_cask:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ casks }}"
+      when: ansible_os_family == 'Darwin'
+      ignore_errors: yes
+      register: cask_result
+
+    - name: Display failed casks
+      debug:
+        msg: "Failed to install {{ item.item }}"
+      loop: "{{ cask_result.results }}"
+      when: item.failed
