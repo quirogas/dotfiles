@@ -35,16 +35,6 @@
         - { url: "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf", name: "MesloLGS NF Bold Italic.ttf" }
       when: ansible_os_family == 'Darwin'
 
-    - name: Check if Homebrew is installed
-      command: brew --version
-      register: brew_installed
-      failed_when: false
-      changed_when: false
-
-    - name: Install Homebrew
-      command: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      when: brew_installed is failed
-
     - name: Install Homebrew packages
       community.general.homebrew:
         name: "{{ packages }}"
