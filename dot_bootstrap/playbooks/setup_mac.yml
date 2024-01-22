@@ -7,11 +7,17 @@
         - git
         - docker
         - fd
+	- tree
         - ripgrep
         - neovim
         - powerlevel10k
         - zsh-autosuggestions
         - zsh-syntax-highlighting
+	- node 
+	- chafa
+	- imagemagick
+	- ghostscript
+	- poppler
       casks:
         - spotify
         - firefox
