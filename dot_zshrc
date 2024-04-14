@@ -18,11 +18,16 @@ source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
 # Oh my zsh config
 ENABLE_CORRECTION="true"
 
-# Oh my zsh plugins
 
-plugins=(git gitfast docker fd pip poetry)
+
+# Oh my zsh plugins
+plugins=(git gitfast docker fd pip poetry python )
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Automatically activate the venv virtual environment when entering a directory containing
+export PYTHON_AUTO_VRUN=true
+
 
 # Other
 source $ZSH/oh-my-zsh.sh

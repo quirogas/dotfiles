@@ -55,12 +55,12 @@ function M.config()
     ["<leader>lr"] = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
   }
 
-  wk.register {
-    ["<leader>la"] = {
-      name = "LSP",
-      a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action", mode = "v" },
-    },
-  }
+  -- wk.register {
+  --   ["<leader>la"] = {
+  --     name = "LSP",
+  --     a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action", mode = "v" },
+  --   },
+  -- }
 
   local lspconfig = require "lspconfig"
   local icons = require "user.icons"
@@ -89,7 +89,7 @@ function M.config()
         { name = "DiagnosticSignInfo", text = icons.diagnostics.Information },
       },
     },
-    virtual_text = false,
+    virtual_text = true,
     update_in_insert = false,
     underline = true,
     severity_sort = true,
