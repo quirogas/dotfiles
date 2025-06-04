@@ -3,13 +3,13 @@ local M = {
 }
 
 function M.config()
-  local actions_preview = require("actions-preview")
+  local actions_preview = require "actions-preview"
 
-    local wk = require "which-key"
-    wk.register {
-      name = "LSP",
-      ["<leader>la"] = { actions_preview.code_actions, "Preview Action" },
-    }
+  local wk = require "which-key"
+
+  wk.add {
+    { "<leader>la", actions_preview.code_actions, desc = "Preview Action" },
+  }
 
   actions_preview.setup {
     diff = {
@@ -25,7 +25,7 @@ function M.config()
     },
 
     -- priority list of preferred backend
-    backend = { "telescope"},
+    backend = { "telescope" },
 
     -- options related to telescope.nvim
     telescope = {

@@ -1,2 +1,9 @@
 [tools]
+cargo = "latest"
+go = "latest"
+lua = "5.1"
 node = "22"
+python = "latest"
+ruff = "latest"
+rust = "latest"
+stylua = "latest"

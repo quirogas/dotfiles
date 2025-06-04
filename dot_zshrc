@@ -33,7 +33,7 @@ export PYTHON_AUTO_VRUN=true
 
 # Other
 source $ZSH/oh-my-zsh.sh
-source $HOME/.zsh/aliases
+# source $HOME/.zsh/aliases
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
