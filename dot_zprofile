@@ -1,2 +1,7 @@
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# machine dependent config
+if [ -f "$HOME/.zprofile_local" ]; then
+    . "$HOME/.zprofile_local"
+fi
