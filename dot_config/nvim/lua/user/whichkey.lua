@@ -10,12 +10,6 @@ function M.config()
   local new_mappings = {
     { "<leader>;", "<cmd>tabnew | terminal<CR>", desc = "Term" },
     { "<leader>T", group = "Treesitter" },
-    { "<leader>a", group = "Tab" },
-    { "<leader>aN", "<cmd>tabnew %<cr>", desc = "New Tab" },
-    { "<leader>ah", "<cmd>-tabmove<cr>", desc = "Move Left" },
-    { "<leader>al", "<cmd>+tabmove<cr>", desc = "Move Right" },
-    { "<leader>an", "<cmd>$tabnew<cr>", desc = "New Empty Tab" },
-    { "<leader>ao", "<cmd>tabonly<cr>", desc = "Only" },
     { "<leader>b", group = "Buffers" },
     { "<leader>d", group = "Debug" },
     { "<leader>f", group = "Find" },

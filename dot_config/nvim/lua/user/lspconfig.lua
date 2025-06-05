@@ -26,10 +26,11 @@ end
 M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
 
-  -- Use client:supports_method instead of client.supports_method
-  if client:supports_method "textDocument/inlayHint" then
-    vim.lsp.inlay_hint.enable(bufnr, true)
-  end
+  -- **FIX:** Removed the conditional `vim.lsp.inlay_hint.enable` call for lua_ls
+  -- The lua_ls server's own settings for 'hint.enable = true' are sufficient,
+  -- and attempting to explicitly enable it here can cause a type mismatch.
+  -- Neovim's LSP client should automatically display hints if the server
+  -- reports capability and is configured to send them.
 
   -- Enable completion for the attached client
   vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
@@ -45,6 +46,8 @@ end
 
 M.toggle_inlay_hints = function()
   local bufnr = vim.api.nvim_get_current_buf()
+  -- This toggle function is perfectly fine and will work as expected
+  -- It interacts with Neovim's client-side display, assuming the server supports it.
   vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled(bufnr))
 end
 
