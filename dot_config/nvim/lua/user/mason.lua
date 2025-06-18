@@ -7,10 +7,6 @@ local M = {
 
 function M.config()
   local servers = {
-    "lua_ls",
-    "cssls",
-    "html",
-    "pyright",
     "bashls",
     "jsonls",
   }
@@ -23,6 +19,11 @@ function M.config()
 
   require("mason-lspconfig").setup {
     ensure_installed = servers,
+    automatic_enable = {
+      exclude = {
+        "lua_ls",
+      },
+    },
   }
 end
 

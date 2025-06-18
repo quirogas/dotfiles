@@ -5,21 +5,18 @@ local M = {
 
 function M.config()
   -- Import mini.icons
-  local icons = require "mini.icons"
+  require "mini.icons"
 
-  local new_mappings = {
+  local mappings = {
     { "<leader>;", "<cmd>tabnew | terminal<CR>", desc = "Term" },
     { "<leader>T", group = "Treesitter" },
     { "<leader>b", group = "Buffers" },
-    { "<leader>d", group = "Debug" },
     { "<leader>f", group = "Find" },
     { "<leader>g", group = "Git" },
     { "<leader>h", "<cmd>nohlsearch<CR>", desc = "NOHL" },
     { "<leader>l", group = "LSP" },
     { "<leader>p", group = "Plugins" },
-    { "<leader>q", "<cmd>confirm q<CR>", desc = "Quit" },
     { "<leader>t", group = "Test" },
-    { "<leader>v", "<cmd>vsplit<CR>", desc = "Split" },
   }
 
   local which_key = require "which-key"
@@ -60,7 +57,7 @@ function M.config()
     prefix = "<leader>",
   }
 
-  which_key.add(new_mappings, opts)
+  which_key.add(mappings, opts)
 end
 
 return M

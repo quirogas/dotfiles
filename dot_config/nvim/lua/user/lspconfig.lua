@@ -2,14 +2,16 @@ local M = {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
-    { "folke/neodev.nvim", config = true }, -- neodev setup should be handled by itself
+    -- { "folke/neodev.nvim", config = true }, -- neodev setup should be handled by itself
     "nvim-tree/nvim-web-devicons", -- Often a dependency for icons in diagnostics/UI
   },
 }
 
 -- Helper function for LSP keymaps
+-- Helper function for LSP keymaps
 local function lsp_keymaps(bufnr)
-  local opts = { noremap = true, silent = true }
+  local opts = { noremap = true, silent = true, buffer = bufnr } -- Add buffer = bufnr here
+
   -- Using vim.keymap.set is the modern way over vim.api.nvim_buf_set_keymap
   vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
   vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
@@ -19,11 +21,11 @@ local function lsp_keymaps(bufnr)
   vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
   vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
   -- Add more keymaps here as needed, e.g., for renaming, code actions, etc.
-  -- keymap(bufnr, "n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-  -- keymap(bufnr, "n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+  vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts) -- Now uses 'opts' with buffer
+  vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts) -- Now uses 'opts' with buffer
 end
 
-M.on_attach = function(client, bufnr)
+M.on_attach = function(_, bufnr)
   lsp_keymaps(bufnr)
 
   -- **FIX:** Removed the conditional `vim.lsp.inlay_hint.enable` call for lua_ls
@@ -33,22 +35,24 @@ M.on_attach = function(client, bufnr)
   -- reports capability and is configured to send them.
 
   -- Enable completion for the attached client
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+  vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 end
 
 function M.common_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
   -- Ensure support for textDocument/semanticTokens is enabled if needed for treesitter highlighting
-  capabilities.textDocument.semanticTokens = { dynamicRegistration = true }
+  capabilities.textDocument.semanticTokens = {
+    dynamicRegistration = true,
+    requests = {
+      full = { delta = true },
+      range = true,
+    },
+    tokenTypes = {}, -- Client must declare capability for token types
+    tokenModifiers = {}, -- Client must declare capability for token modifiers
+    formats = { "relative" }, -- Client supports relative format
+  }
   return capabilities
-end
-
-M.toggle_inlay_hints = function()
-  local bufnr = vim.api.nvim_get_current_buf()
-  -- This toggle function is perfectly fine and will work as expected
-  -- It interacts with Neovim's client-side display, assuming the server supports it.
-  vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled(bufnr))
 end
 
 function M.config()
@@ -64,7 +68,6 @@ function M.config()
       "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
       desc = "Format",
     },
-    { "<leader>lh", "<cmd>lua require('user.lspconfig').toggle_inlay_hints()<cr>", desc = "Hints" },
     { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
     { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
     { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic" },
@@ -116,7 +119,7 @@ function M.config()
       focusable = true,
       style = "minimal",
       border = "rounded",
-      source = "always",
+      source = true, -- Changed from "always" to true
       header = "",
       prefix = "",
     },
@@ -146,13 +149,6 @@ function M.config()
     if require_ok and type(settings) == "table" then
       -- Deep merge server-specific settings with common options
       opts = vim.tbl_deep_extend("force", opts, settings)
-    end
-
-    -- Ensure neodev.nvim is set up for lua_ls if it wasn't configured globally
-    if server == "lua_ls" then
-      -- If neodev has a setup function, it should be called
-      -- The `config = true` in lazy.nvim dependency handles this for you if it's a simple setup.
-      -- If neodev needs custom options, you might put `require("neodev").setup(custom_options)` here.
     end
 
     lspconfig[server].setup(opts)

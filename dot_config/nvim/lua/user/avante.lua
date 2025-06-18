@@ -37,6 +37,9 @@ function M.config()
     -- General Avante.nvim settings (optional, you can add more as you explore)
     auto_refresh = true, -- Automatically refresh code after AI edits
     provider = "gemini",
+    web_search_engine = {
+      provider = "google", -- tavily, serpapi, searchapi, google, kagi, brave, or searxng
+    },
     providers = {
       -- Specify the Gemini provider configuration here
       gemini = {
@@ -65,8 +68,8 @@ function M.config()
     -- Chat and edit models should now reference the provider and model
     -- You can set these to use the 'gemini' provider's configured model,
     -- or explicitly define a different model if desired.
-    -- chat_model = "gemini:gemini-1.5", -- Format: "provider_name:model_name"
-    -- edit_model = "gemini:gemini-1.5", -- Format: "provider_name:model_name"
+    chat_model = "gemini:gemini-2.5-flash-latest", -- Format: "provider_name:model_name"
+    edit_model = "gemini:gemini-2.5-flash-latest", -- Format: "provider_name:model_name"
   }
 
   --- Which-key Mappings for Avante.nvim ---
