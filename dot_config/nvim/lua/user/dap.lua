@@ -8,7 +8,7 @@ local M = {
     "theHamsta/nvim-dap-virtual-text",
     -- Add specific debuggers here as needed
     -- { "mfussenegger/nvim-dap-python" },
-    { "leoluz/nvim-dap-go" },
+    -- { "leoluz/nvim-dap-go" },
     -- { "microsoft/vscode-node-debug2", build = "npm install --legacy-peer-deps", version = ">=1.20.0" },
   },
 }
@@ -37,39 +37,7 @@ function M.config()
     { "<leader>dB", "<cmd>DapClearBreakpoints<CR>", desc = "Clear breakpoints" },
     { "<leader>dl", "<cmd>DapSetLogLevel<CR>", desc = "Set log level" },
     { "<leader>dL", "<cmd>DapShowLog<CR>", desc = "Show log" },
-    -- USER COMMANDS                                             *dap-user-commands*
-    --
-    -- nvim-dap provides the following user commands.
-    --
-    -- Session management:
-    --
-    -- - `DapContinue`: Continue executing a paused session or start a new one
-    -- - `DapDisconnect`: Disconnect from an active debugging session
-    -- - `DapNew`: Start one or more new debug sessions
-    -- - `DapTerminate`: Terminate the current session
-    --
-    -- Stepping:
-    --
-    -- - `DapRestartFrame`: Restart the active sessions' current frame
-    -- - `DapStepInto`: Step into the current expression
-    -- - `DapStepOut`: Step out of the current scope
-    -- - `DapStepOver`: Step over the current line
-    -- - `DapPause`: Pause the current thread or pick a thread to pause
-    --
-    -- REPL:
-    --
-    -- - `DapEval`: Create a new window & buffer to evaluate expressions
-    -- - `DapToggleRepl`: Open or close the REPL
-    --
-    -- Breakpoints:
-    --
-    -- - `DapClearBreakpoints` : Clear all breakpoints
-    -- - `DapToggleBreakpoint` : Set or remove breakpoint
-    --
-    -- Diagnostics:
-    --
-    -- - `DapSetLogLevel` : Set the log level
-    -- - `DapShowLog` : Show the session log in a split window
+    { "<leader>du", "<cmd>lua require('dapui').toggle()<CR>", desc = "DAP UI" },
   }
 
   vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint" })
@@ -95,7 +63,6 @@ function M.config()
     },
     controls = {
       enabled = true, -- Added missing required field
-      element = "controls",
       icons = {
         play = "▶",
         pause = "⏸",

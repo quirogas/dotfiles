@@ -43,33 +43,12 @@ function M.config()
     providers = {
       -- Specify the Gemini provider configuration here
       gemini = {
-        -- Recommended model for general use with Avante.nvim
-        -- You can choose based on your needs: gemini-1.5-flash-latest, gemini-1.5-pro-latest, etc.
-        model = "gemini-1.5-flash-latest",
+        -- Set the single, default model for all actions.
+        model = os.getenv "AVANTE_GEMINI_DEFAULT_MODEL" or "gemini-2.0-flash",
         -- The endpoint for the Gemini API. This is the default.
         endpoint = "https://generativelanguage.googleapis.com/v1beta/models",
-
-        -- Optional: Configure extra request body parameters (e.g., safety settings, temperature)
-        -- These are now inside 'extra_request_body'
-        extra_request_body = {
-          -- temperature = 0.5,
-          -- max_output_tokens = 2048,
-          -- safety_settings = {
-          --   {
-          --     category = "HARM_CATEGORY_HATE_SPEECH",
-          --     threshold = "BLOCK_NONE",
-          --   },
-          --   -- Add other safety categories as needed
-          -- },
-        },
       },
     },
-
-    -- Chat and edit models should now reference the provider and model
-    -- You can set these to use the 'gemini' provider's configured model,
-    -- or explicitly define a different model if desired.
-    chat_model = "gemini:gemini-2.5-flash-latest", -- Format: "provider_name:model_name"
-    edit_model = "gemini:gemini-2.5-flash-latest", -- Format: "provider_name:model_name"
   }
 
   --- Which-key Mappings for Avante.nvim ---

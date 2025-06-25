@@ -9,6 +9,7 @@ function M.config()
   local servers = {
     "bashls",
     "jsonls",
+    "gopls",
   }
 
   require("mason").setup {

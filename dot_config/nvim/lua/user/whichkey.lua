@@ -35,7 +35,7 @@ function M.config()
         windows = false,
         nav = false,
         z = false,
-        g = false,
+        g = true,
       },
     },
     windows = {
@@ -44,8 +44,8 @@ function M.config()
       padding = { 2, 2, 2, 2 },
     },
     -- ignore_missing = true,
-    show_help = false,
-    show_keys = false,
+    show_help = true,
+    show_keys = true,
     disable = {
       buftypes = {},
       filetypes = { "TelescopePrompt" },

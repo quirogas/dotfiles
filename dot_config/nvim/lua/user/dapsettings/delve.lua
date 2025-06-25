@@ -14,6 +14,7 @@ return {
         name = "Debug",
         request = "launch",
         program = "${file}",
+        outputMode = "remote",
       },
       {
         type = "delve",
@@ -21,6 +22,7 @@ return {
         request = "launch",
         mode = "test",
         program = "${file}",
+        outputMode = "remote",
       },
       -- works with go.mod packages and sub packages
       {
@@ -29,6 +31,7 @@ return {
         request = "launch",
         mode = "test",
         program = "./${relativeFileDirname}",
+        outputMode = "remote",
       },
     },
   },

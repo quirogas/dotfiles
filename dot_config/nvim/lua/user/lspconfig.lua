@@ -10,7 +10,7 @@ local M = {
 -- Helper function for LSP keymaps
 -- Helper function for LSP keymaps
 local function lsp_keymaps(bufnr)
-  local opts = { noremap = true, silent = true, buffer = bufnr } -- Add buffer = bufnr here
+  local opts = { noremap = true, silent = false, buffer = bufnr } -- Add buffer = bufnr here
 
   -- Using vim.keymap.set is the modern way over vim.api.nvim_buf_set_keymap
   vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
@@ -88,6 +88,7 @@ function M.config()
     "jsonls",
     "yamlls",
     "ruff",
+    "gopls",
     -- Add more servers here, e.g., "tsserver" for TypeScript
     -- "tsserver",
   }
