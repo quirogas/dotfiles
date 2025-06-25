@@ -8,7 +8,6 @@ function M.config()
   require "mini.icons"
 
   local mappings = {
-    { "<leader>;", "<cmd>tabnew | terminal<CR>", desc = "Term" },
     { "<leader>T", group = "Treesitter" },
     { "<leader>b", group = "Buffers" },
     { "<leader>f", group = "Find" },

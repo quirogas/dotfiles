@@ -44,8 +44,6 @@ function M.config()
   local luasnip = require "luasnip"
   require("luasnip/loaders/from_vscode").lazy_load()
 
-  vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
-  vim.api.nvim_set_hl(0, "CmpItemKindTabnine", { fg = "#CA42F0" })
   vim.api.nvim_set_hl(0, "CmpItemKindEmoji", { fg = "#FDE030" })
 
   local check_backspace = function()
@@ -85,10 +83,8 @@ function M.config()
           luasnip.expand_or_jump()
         elseif check_backspace() then
           fallback()
-          -- require("neotab").tabout()
         else
           fallback()
-          -- require("neotab").tabout()
         end
       end, {
         "i",
@@ -126,19 +122,12 @@ function M.config()
           vim_item.kind_hl_group = "CmpItemKindEmoji"
         end
 
-        if entry.source.name == "cmp_tabnine" then
-          vim_item.kind = icons.misc.Robot
-          vim_item.kind_hl_group = "CmpItemKindTabnine"
-        end
-
         return vim_item
       end,
     },
     sources = {
-      { name = "copilot" },
       { name = "nvim_lsp" },
       { name = "luasnip" },
-      { name = "cmp_tabnine" },
       { name = "nvim_lua" },
       { name = "buffer" },
       { name = "path" },
