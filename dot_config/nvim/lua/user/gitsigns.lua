@@ -2,6 +2,7 @@ local M = {
   "lewis6991/gitsigns.nvim",
   event = "BufEnter",
   cmd = "Gitsigns",
+  dependencies = { "folke/which-key.nvim" },
 }
 M.config = function()
   local icons = require "user.icons"

@@ -6,6 +6,7 @@ local M = {
       "JoosepAlviste/nvim-ts-context-commentstring",
       event = "VeryLazy",
     },
+    { "folke/which-key.nvim" },
   },
 }
 

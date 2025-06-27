@@ -1,6 +1,7 @@
 local M = {
   "neogitorg/neogit",
   event = "VeryLazy",
+  dependencies = { "folke/which-key.nvim" },
 }
 
 function M.config()

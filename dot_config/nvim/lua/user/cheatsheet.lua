@@ -5,6 +5,7 @@ local M = {
     { "nvim-telescope/telescope.nvim" },
     { "nvim-lua/popup.nvim" },
     { "nvim-lua/plenary.nvim" },
+    { "folke/which-key.nvim" },
   },
 }
 

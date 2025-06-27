@@ -1,5 +1,6 @@
 local M = {
   "aznhe21/actions-preview.nvim",
+  dependencies = { "folke/which-key.nvim" },
 }
 
 function M.config()

@@ -23,6 +23,7 @@ function M.config()
     automatic_enable = {
       exclude = {
         "lua_ls",
+        "gopls",
       },
     },
   }

@@ -4,25 +4,37 @@ local M = {
   dependencies = {
     -- { "folke/neodev.nvim", config = true }, -- neodev setup should be handled by itself
     "nvim-tree/nvim-web-devicons", -- Often a dependency for icons in diagnostics/UI
+    "folke/which-key.nvim",
   },
 }
 
 -- Helper function for LSP keymaps
--- Helper function for LSP keymaps
 local function lsp_keymaps(bufnr)
-  local opts = { noremap = true, silent = false, buffer = bufnr } -- Add buffer = bufnr here
+  local wk = require "which-key"
+  local opts = { noremap = true, silent = false, buffer = bufnr }
 
-  -- Using vim.keymap.set is the modern way over vim.api.nvim_buf_set_keymap
-  vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-  vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-  -- Pass border option directly to hover function
-  vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover({border = 'rounded'})<CR>", opts)
-  vim.keymap.set("n", "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-  vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-  vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-  -- Add more keymaps here as needed, e.g., for renaming, code actions, etc.
-  vim.keymap.set("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts) -- Now uses 'opts' with buffer
-  vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts) -- Now uses 'opts' with buffer
+  wk.add {
+    { "g", group = "goto" },
+    { "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", desc = "Declaration", buffer = bufnr },
+    { "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", desc = "Definition", buffer = bufnr },
+    { "gI", "<cmd>lua vim.lsp.buf.implementation()<CR>", desc = "Implementation", buffer = bufnr },
+    { "gr", "<cmd>lua vim.lsp.buf.references()<CR>", desc = "References", buffer = bufnr },
+    { "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", desc = "Line Diagnostics", buffer = bufnr },
+    { "K", "<cmd>lua vim.lsp.buf.hover({border = 'rounded'})<CR>", desc = "Hover", buffer = bufnr },
+    { "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action", buffer = bufnr },
+    {
+      "<leader>f",
+      "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
+      desc = "Format",
+      buffer = bufnr,
+    },
+    { "<leader>i", "<cmd>LspInfo<cr>", desc = "Info", buffer = bufnr },
+    { "<leader>j", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic", buffer = bufnr },
+    { "<leader>k", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic", buffer = bufnr },
+    { "<leader>l", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens Action", buffer = bufnr },
+    { "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Quickfix", buffer = bufnr },
+    { "<leader>r", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename", buffer = bufnr },
+  }
 end
 
 M.on_attach = function(_, bufnr)
@@ -56,27 +68,8 @@ function M.common_capabilities()
 end
 
 function M.config()
-  local wk = require "which-key"
   local lspconfig = require "lspconfig"
   local icons = require "user.icons" -- Assuming this file provides your diagnostic icons
-
-  wk.add {
-    { "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action" },
-    {
-      "<leader>lf",
-      -- Use vim.lsp.buf.format directly. Filter is a valid option.
-      "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
-      desc = "Format",
-    },
-    { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
-    { "<leader>lj", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
-    { "<leader>lk", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic" },
-    { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens Action" },
-    { "<leader>lq", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Quickfix" },
-    { "<leader>lr", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename" },
-    -- Example for new keymap:
-    -- { "<leader>lx", "<cmd>lua vim.lsp.buf.hover()<CR>", desc = "Hover Docs" },
-  }
 
   local servers = {
     "lua_ls",
