@@ -9,7 +9,13 @@ return {
   },
   configurations = {
     go = {
-      -- works with go.mod packages and sub packages
+      {
+        type = "go",
+        name = "Launch file",
+        request = "launch",
+        mode = "debug",
+        program = "${file}",
+      },
       {
         type = "go",
         name = "Debug test (go.mod)",
@@ -21,3 +27,4 @@ return {
     },
   },
 }
+

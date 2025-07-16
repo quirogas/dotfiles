@@ -40,6 +40,11 @@ function M.config()
     web_search_engine = {
       provider = "google", -- tavily, serpapi, searchapi, google, kagi, brave, or searxng
     },
+    sandbox = {
+      allowed_read_paths = { "~" },
+      allowed_write_paths = { "~" },
+      allowed_commands = { "ls" },
+    },
     providers = {
       -- Specify the Gemini provider configuration here
       gemini = {
