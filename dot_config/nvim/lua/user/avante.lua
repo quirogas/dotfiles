@@ -24,7 +24,13 @@ local M = {
     -- "echasnovski/mini.icons", -- You mentioned mini.icons in your which-key config, so this might be relevant.
   },
   -- If you need to build from source (e.g., prebuilt binary not available for your system)
-  build = "make", -- Or "powershell -ExecutionPolicy Bypass -File Build.ps1" for Windows
+  build = function()
+    if vim.fn.has "win32" == 1 then
+      return "powershell -ExecutionPolicy Bypass -File Build.ps1"
+    else
+      return "make"
+    end
+  end,
 }
 
 function M.config()
@@ -34,24 +40,20 @@ function M.config()
 
   -- Avante.nvim setup: Configure the AI provider
   require("avante").setup {
-    -- General Avante.nvim settings (optional, you can add more as you explore)
-    auto_refresh = true, -- Automatically refresh code after AI edits
     provider = "gemini",
-    web_search_engine = {
-      provider = "google", -- tavily, serpapi, searchapi, google, kagi, brave, or searxng
+    mode = "agentic", -- Use "agentic" mode for tool-based interaction
+    behaviour = {
+      auto_approve_tool_permissions = false, -- Prompt for permission before using tools
     },
-    sandbox = {
-      allowed_read_paths = { "~" },
-      allowed_write_paths = { "~" },
-      allowed_commands = { "ls" },
+    web_search_engine = {
+      provider = "google", -- tavily, serpapi, google, kagi, brave, or searxng
+      -- proxy = nil, -- proxy support, e.g., http://127.0.0.1:7890
     },
     providers = {
-      -- Specify the Gemini provider configuration here
       gemini = {
-        -- Set the single, default model for all actions.
+        -- Set a current, valid model
         model = os.getenv "AVANTE_GEMINI_DEFAULT_MODEL" or "gemini-2.0-flash",
-        -- The endpoint for the Gemini API. This is the default.
-        endpoint = "https://generativelanguage.googleapis.com/v1beta/models",
+        -- No endpoint needed, let the plugin use its default
       },
     },
   }

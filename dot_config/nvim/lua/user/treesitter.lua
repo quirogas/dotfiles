@@ -2,19 +2,22 @@ local M = {
   "nvim-treesitter/nvim-treesitter",
   event = { "BufReadPost", "BufNewFile" },
   build = ":TSUpdate",
+  branch = "main",
 }
 
 function M.config()
-  require("nvim-treesitter.configs").setup {
+  require("nvim-treesitter").setup {
     ensure_installed = { "lua", "markdown", "markdown_inline", "bash", "python", "vimdoc", "go" },
     highlight = { enable = true },
     indent = { enable = true },
     textobjects = {
       select = {
         enable = true,
-        lookahead = true,
+        lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
         keymaps = {
           -- You can use the capture groups defined in textobjects.scm
+          ["aa"] = "@parameter.outer",
+          ["ia"] = "@parameter.inner",
           ["af"] = "@function.outer",
           ["if"] = "@function.inner",
           ["ac"] = "@class.outer",

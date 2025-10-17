@@ -68,7 +68,6 @@ function M.common_capabilities()
 end
 
 function M.config()
-  local lspconfig = require "lspconfig"
   local icons = require "user.icons" -- Assuming this file provides your diagnostic icons
 
   local servers = {
@@ -119,19 +118,7 @@ function M.config()
     },
   }
 
-  -- Configure LSP UI styling directly for specific features
-  -- vim.lsp.handlers["textDocument/hover"] and vim.lsp.handlers["textDocument/signatureHelp"] are deprecated.
-  -- Instead, pass options directly to vim.lsp.buf.hover() and vim.lsp.buf.signature_help().
-  -- The existing keymap for 'K' has been updated above.
-  -- For signature help, if you have a keymap or other trigger for it, update it similarly.
-  -- If signature help is automatically shown, its floating window style might be influenced
-  -- by the general `vim.diagnostic.config` or `require("lspconfig.ui.windows").default_options`.
-  -- However, for the specific border on signature help, you generally would set it where `signature_help` is called.
-
-  -- This line is still relevant for LSPInfo and other lspconfig-provided UI windows.
-  require("lspconfig.ui.windows").default_options.border = "rounded"
-
-  -- Iterate through servers and set them up
+  -- Iterate through servers and set them up using the new API
   for _, server in pairs(servers) do
     local opts = {
       on_attach = M.on_attach,
@@ -144,8 +131,8 @@ function M.config()
       -- Deep merge server-specific settings with common options
       opts = vim.tbl_deep_extend("force", opts, settings)
     end
-
-    lspconfig[server].setup(opts)
+    -- Use the new vim.lsp.config API to configure servers
+    vim.lsp.config(server, opts)
   end
 end
 
