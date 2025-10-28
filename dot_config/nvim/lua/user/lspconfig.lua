@@ -68,23 +68,7 @@ function M.common_capabilities()
 end
 
 function M.config()
-  local icons = require "user.icons" -- Assuming this file provides your diagnostic icons
-
-  local servers = {
-    "lua_ls",
-    "cssls",
-    "html",
-    "eslint",
-    "pyright",
-    "bashls",
-    "jsonls",
-    "yamlls",
-    "ruff",
-    "gopls",
-    -- Add more servers here, e.g., "tsserver" for TypeScript
-    -- "tsserver",
-  }
-
+  local icons = require "user.icons"
   -- Define diagnostic configuration using the modern vim.diagnostic.config()
   vim.diagnostic.config {
     signs = {
@@ -96,13 +80,6 @@ function M.config()
         [vim.diagnostic.severity.INFO] = icons.diagnostics.Information or "I",
         [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint or "H",
       },
-      -- Highlight groups are usually linked automatically, but you can explicitly define them
-      -- texthl = {
-      --   [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
-      --   [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
-      --   [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
-      --   [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
-      -- },
     },
     virtual_text = true,
     update_in_insert = false,
@@ -117,23 +94,6 @@ function M.config()
       prefix = "",
     },
   }
-
-  -- Iterate through servers and set them up using the new API
-  for _, server in pairs(servers) do
-    local opts = {
-      on_attach = M.on_attach,
-      capabilities = M.common_capabilities(),
-    }
-
-    -- Try to load server-specific settings from user.lspsettings
-    local require_ok, settings = pcall(require, "user.lspsettings." .. server)
-    if require_ok and type(settings) == "table" then
-      -- Deep merge server-specific settings with common options
-      opts = vim.tbl_deep_extend("force", opts, settings)
-    end
-    -- Use the new vim.lsp.config API to configure servers
-    vim.lsp.config(server, opts)
-  end
 end
 
 return M

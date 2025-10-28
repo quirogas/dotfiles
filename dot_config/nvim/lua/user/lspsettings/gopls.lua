@@ -1,11 +1,11 @@
--- Find gopls path from mise, with a fallback to the default path
+-- Find gopls path from mise, with a fallback to the mason path
 local gopls_path = vim.fn.trim(vim.fn.system "mise which gopls 2>/dev/null")
-if vim.fn.empty(gopls_path) == 1 then
-  gopls_path = "gopls" -- Fallback to gopls in PATH
+if vim.v.shell_error ~= 0 or gopls_path == "" then
+  gopls_path = vim.fn.stdpath "data" .. "/mason/bin/gopls"
 end
 
 return {
-  -- Dynamically set the command to use the gopls found by mise
+  -- Dynamically set the command to use the gopls found by mise or mason
   cmd = { gopls_path, "serve" },
   settings = {
     gopls = {

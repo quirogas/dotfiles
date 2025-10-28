@@ -24,13 +24,7 @@ local M = {
     -- "echasnovski/mini.icons", -- You mentioned mini.icons in your which-key config, so this might be relevant.
   },
   -- If you need to build from source (e.g., prebuilt binary not available for your system)
-  build = function()
-    if vim.fn.has "win32" == 1 then
-      return "powershell -ExecutionPolicy Bypass -File Build.ps1"
-    else
-      return "make"
-    end
-  end,
+  build = "make",
 }
 
 function M.config()
@@ -52,9 +46,28 @@ function M.config()
     providers = {
       gemini = {
         -- Set a current, valid model
-        model = os.getenv "AVANTE_GEMINI_DEFAULT_MODEL" or "gemini-2.0-flash",
+        model = os.getenv "AVANTE_GEMINI_DEFAULT_MODEL" or "gemini-2.5-flash",
         -- No endpoint needed, let the plugin use its default
       },
+    },
+
+    --- NEW: Suggestion Engine Tuning ---
+    -- This section directly controls the frequency of API requests.
+    suggestion = {
+      -- Debounce requests to avoid sending them on every keystroke.
+      -- The default is 600ms; a slightly higher value can further reduce requests.
+      debounce = 800, -- (milliseconds)
+    },
+
+    --- NEW: Autocompletion Engine ---
+    -- This section enables and configures the inline code completion.
+    auto_suggestions = {
+      -- Enable the autocompletion feature.
+      enabled = true,
+      -- Use a provider specifically for completions.
+      -- The "flash" models are faster and cheaper, ideal for this.
+      provider = "gemini",
+      model = "gemini-2.5-flash",
     },
   }
 

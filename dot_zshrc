@@ -23,7 +23,7 @@ ENABLE_CORRECTION="true"
 
 
 # Oh my zsh plugins
-plugins=(git gitfast docker pip poetry python  zsh-vi-mode mise)
+plugins=(git gitfast docker pip poetry python  zsh-vi-mode mise direnv)
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -33,7 +33,8 @@ export PYTHON_AUTO_VRUN=true
 
 # Other
 source $ZSH/oh-my-zsh.sh
-# source $HOME/.zsh/aliases
+source $HOME/.zsh/aliases.zsh
+source $HOME/.zsh/commands.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
