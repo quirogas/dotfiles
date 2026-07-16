@@ -1,48 +1,61 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Path configurations
+export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    export PATH="$HOME/neovim/bin:/usr/lib/cargo/bin:$PATH"
+fi
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PATH="$HOME/go/bin:$PATH"
+fi
 
-# Path stuff
-export PYTHON_PATH=$HOME/Library/Python/3.9/bin
-export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PYTHON_PATH:$PATH
 export ZSH="$HOME/.oh-my-zsh"
-export ANSIBLE_CONFIG="$HOME/.bootstrap/ansible.cfg"
-export PATH=$HOME/go/bin:$PATH
+export ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
-
-# powerlevel10k theme is installed trhough brew  instead of a custom theme
-source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
-
-# Oh my zsh config
+# Theme & Oh My Zsh config
+ZSH_THEME="powerlevel10k/powerlevel10k"
 ENABLE_CORRECTION="true"
+plugins=(git gitfast docker pip poetry python zsh-vi-mode)
 
+# Load Powerlevel10k & Plugins based on OS / environment
+if command -v brew &> /dev/null; then
+    [[ -f "$(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme" ]] && source "$(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme"
+    [[ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    [[ -f "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
 
+# Fallback / Linux (Oh-My-Zsh custom directory)
+[[ -f "$ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme" ]] && source "$ZSH_CUSTOM/themes/powerlevel10k/powerlevel10k.zsh-theme"
+[[ -f "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && source "$ZSH_CUSTOM/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -f "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && source "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
-# Oh my zsh plugins
-plugins=(git gitfast docker pip poetry python  zsh-vi-mode mise direnv)
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# Automatically activate the venv virtual environment when entering a directory containing
+# Automatically activate venv if entering directory
 export PYTHON_AUTO_VRUN=true
 
+# Oh My Zsh startup
+[[ -f "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
-# Other
-source $ZSH/oh-my-zsh.sh
-source $HOME/.zsh/aliases.zsh
-source $HOME/.zsh/commands.zsh
+# Public Aliases and Commands (Tracked in Chezmoi)
+[[ -f "$HOME/.zsh/aliases.zsh" ]] && source "$HOME/.zsh/aliases.zsh"
+[[ -f "$HOME/.zsh/commands.zsh" ]] && source "$HOME/.zsh/commands.zsh"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# Customize prompt (p10k)
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# pyenv setup 
+# pyenv setup
 export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+if [ -d "$PYENV_ROOT/bin" ]; then
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+fi
 
-# mise
-eval "$(mise activate zsh)"
+# mise setup
+if command -v mise &> /dev/null; then
+    eval "$(mise activate zsh)"
+fi
+
+# Local / Private / Machine-specific overrides (NOT tracked in git)
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
