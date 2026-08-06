@@ -6,6 +6,7 @@ return {
       command = "dlv",
       args = { "dap", "-l", "127.0.0.1:${port}" },
     },
+    warn_test_name_dupes = false
   },
   configurations = {
     go = {
@@ -27,4 +28,3 @@ return {
     },
   },
 }
-

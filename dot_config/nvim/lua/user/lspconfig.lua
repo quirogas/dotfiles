@@ -22,12 +22,6 @@ local function lsp_keymaps(bufnr)
     { "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", desc = "Line Diagnostics", buffer = bufnr },
     { "K", "<cmd>lua vim.lsp.buf.hover({border = 'rounded'})<CR>", desc = "Hover", buffer = bufnr },
     { "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "Code Action", buffer = bufnr },
-    {
-      "<leader>f",
-      "<cmd>lua vim.lsp.buf.format({async = true, filter = function(client) return client.name ~= 'typescript-tools' end})<cr>",
-      desc = "Format",
-      buffer = bufnr,
-    },
     { "<leader>i", "<cmd>LspInfo<cr>", desc = "Info", buffer = bufnr },
     { "<leader>j", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic", buffer = bufnr },
     { "<leader>k", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic", buffer = bufnr },

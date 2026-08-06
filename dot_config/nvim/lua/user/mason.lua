@@ -14,7 +14,7 @@ function M.config()
 
   require("mason-lspconfig").setup {
     -- A list of servers to automatically install if they're not already installed
-    ensure_installed = { "lua_ls", "gopls", "jsonls", "ruff" },
+    ensure_installed = { "lua_ls", "gopls", "jsonls", "ruff", "yamlls" },
   }
 
   local lsp_defaults = require "user.lspconfig"
@@ -37,7 +37,7 @@ function M.config()
   end
 
   -- List of servers to configure
-  local servers = { "lua_ls", "gopls", "jsonls", "ruff" }
+  local servers = { "lua_ls", "gopls", "jsonls", "ruff", "yamlls" }
 
   -- Loop through the servers and define their configurations
   for _, server_name in ipairs(servers) do

@@ -1,25 +1,26 @@
-local M = {
+return {
   "stevearc/conform.nvim",
-}
-
-function M.config()
-  local conform = require "conform"
-
-  -- set autocommand to use format on save
-  vim.api.nvim_create_autocmd("BufWritePre", {
-    pattern = "*",
-    callback = function(args)
-      conform.format { bufnr = args.buf }
-    end,
-  })
-
-  conform.setup {
+  event = { "BufWritePre" },
+  cmd = { "ConformInfo" },
+  keys = {
+    {
+      -- Add a format command
+      "<leader>F",
+      function()
+        require("conform").format { async = true, lsp_fallback = true }
+      end,
+      mode = "",
+      desc = "Format buffer",
+    },
+  },
+  opts = {
     formatters_by_ft = {
-      lua = { "stylua" },
-      python = { "ruff" },
       go = { "gofmt" },
     },
-  }
-end
-
-return M
+    format_on_save = {
+      -- These options will be passed to conform.format()
+      timeout_ms = 500,
+      lsp_fallback = true,
+    },
+  },
+}
