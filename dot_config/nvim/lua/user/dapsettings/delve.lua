@@ -1,29 +1,23 @@
 return {
-  adapter = {
-    type = "server",
-    port = "${port}",
-    executable = {
-      command = "dlv",
-      args = { "dap", "-l", "127.0.0.1:${port}" },
-    },
-    warn_test_name_dupes = false
-  },
   configurations = {
     go = {
       {
         type = "go",
-        name = "Launch file",
+        name = "Launch File",
         request = "launch",
-        mode = "debug",
         program = "${file}",
       },
       {
         type = "go",
-        name = "Debug test (go.mod)",
+        name = "Launch Package",
         request = "launch",
-        mode = "test",
-        program = "./${relativeFileDirname}",
-        outputMode = "remote",
+        program = "${fileDirname}",
+      },
+      {
+        type = "go",
+        name = "Attach (Remote)",
+        mode = "remote",
+        request = "attach",
       },
     },
   },

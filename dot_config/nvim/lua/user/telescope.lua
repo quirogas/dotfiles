@@ -128,6 +128,9 @@ function M.config()
       },
     },
   }
+
+  pcall(require("telescope").load_extension, "fzf")
+  pcall(require("telescope").load_extension, "projects")
 end
 
 return M

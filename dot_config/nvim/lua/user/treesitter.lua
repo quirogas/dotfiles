@@ -3,11 +3,33 @@ local M = {
   event = { "BufReadPost", "BufNewFile" },
   build = ":TSUpdate",
   branch = "main",
+  dependencies = {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+  },
 }
 
 function M.config()
   require("nvim-treesitter").setup {
-    ensure_installed = { "lua", "markdown", "markdown_inline", "bash", "python", "vimdoc", "go" },
+    ensure_installed = {
+      "lua",
+      "markdown",
+      "markdown_inline",
+      "bash",
+      "python",
+      "vimdoc",
+      "go",
+      "gomod",
+      "gowork",
+      "gosum",
+      "javascript",
+      "typescript",
+      "tsx",
+      "json",
+      "jsonc",
+      "yaml",
+      "html",
+      "css",
+    },
     highlight = { enable = true },
     indent = { enable = true },
     textobjects = {

@@ -1,13 +1,24 @@
 local M = {
   "folke/which-key.nvim",
+  event = "VeryLazy",
   dependencies = { "echasnovski/mini.icons" },
 }
 
 function M.config()
-  -- Import mini.icons
-  require "mini.icons"
+  local status_ok, mini_icons = pcall(require, "mini.icons")
+  if status_ok then
+    mini_icons.setup()
+  end
 
-  local mappings = {
+  local which_key = require "which-key"
+  which_key.setup {
+    preset = "modern",
+    win = {
+      border = "rounded",
+    },
+  }
+
+  which_key.add {
     { "<leader>T", group = "Treesitter" },
     { "<leader>b", group = "Buffers" },
     { "<leader>f", group = "Find" },
@@ -17,46 +28,6 @@ function M.config()
     { "<leader>p", group = "Plugins" },
     { "<leader>t", group = "Test" },
   }
-
-  local which_key = require "which-key"
-  which_key.setup {
-    plugins = {
-      marks = true,
-      registers = true,
-      spelling = {
-        enabled = true,
-        suggestions = 20,
-      },
-      presets = {
-        operators = false,
-        motions = false,
-        text_objects = false,
-        windows = false,
-        nav = false,
-        z = false,
-        g = true,
-      },
-    },
-    windows = {
-      border = "rounded",
-      position = "bottom",
-      padding = { 2, 2, 2, 2 },
-    },
-    -- ignore_missing = true,
-    show_help = true,
-    show_keys = true,
-    disable = {
-      buftypes = {},
-      filetypes = { "TelescopePrompt" },
-    },
-  }
-
-  local opts = {
-    mode = "n", -- NORMAL mode
-    prefix = "<leader>",
-  }
-
-  which_key.add(mappings, opts)
 end
 
 return M

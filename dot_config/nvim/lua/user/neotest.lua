@@ -37,15 +37,18 @@ function M.config()
   require("neotest").setup {
     adapters = {
       require "neotest-golang" {
-        dap_singleton_proccess = true,
+        dap_singleton_process = true,
         dap_run_test_in_terminal = true,
-        warn_test_name_dupes = false
-      }, -- Registration
+        warn_test_name_dupes = false,
+      },
       require "neotest-python" {
         dap = { justMyCode = false },
       },
-      require "neotest-vitest",
-      require "neotest-zig",
+      require "neotest-vitest" {},
+      require "neotest-zig" {},
+      require "neotest-rust" {},
+      require "neotest-plenary" {},
+      require "neotest-bash" {},
       require "neotest-vim-test" {
         ignore_file_types = { "python", "vim", "lua", "javascript", "typescript" },
       },

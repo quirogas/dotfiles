@@ -26,19 +26,35 @@ local function lsp_keymaps(bufnr)
     { "<leader>j", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic", buffer = bufnr },
     { "<leader>k", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic", buffer = bufnr },
     { "<leader>l", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens Action", buffer = bufnr },
+    {
+      "<leader>lh",
+      function()
+        local is_enabled = vim.lsp.inlay_hint.is_enabled { bufnr = bufnr }
+        vim.lsp.inlay_hint.enable(not is_enabled, { bufnr = bufnr })
+      end,
+      desc = "Toggle Inlay Hints",
+      buffer = bufnr,
+    },
     { "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<cr>", desc = "Quickfix", buffer = bufnr },
     { "<leader>r", "<cmd>lua vim.lsp.buf.rename()<cr>", desc = "Rename", buffer = bufnr },
   }
 end
 
-M.on_attach = function(_, bufnr)
+M.on_attach = function(client, bufnr)
   lsp_keymaps(bufnr)
 
-  -- **FIX:** Removed the conditional `vim.lsp.inlay_hint.enable` call for lua_ls
-  -- The lua_ls server's own settings for 'hint.enable = true' are sufficient,
-  -- and attempting to explicitly enable it here can cause a type mismatch.
-  -- Neovim's LSP client should automatically display hints if the server
-  -- reports capability and is configured to send them.
+  if client and client.supports_method and client.supports_method "textDocument/inlayHint" then
+    pcall(vim.lsp.inlay_hint.enable, true, { bufnr = bufnr })
+  end
+
+  if client and client.supports_method and client.supports_method "textDocument/codeLens" then
+    vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "InsertLeave" }, {
+      buffer = bufnr,
+      callback = function()
+        pcall(vim.lsp.codelens.refresh, { bufnr = bufnr })
+      end,
+    })
+  end
 
   -- Enable completion for the attached client
   vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"

@@ -1,3 +1,6 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 require "user.launch"
 require "user.options"
 require "user.keymaps"

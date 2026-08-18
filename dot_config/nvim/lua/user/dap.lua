@@ -7,10 +7,36 @@ local M = {
     },
     "theHamsta/nvim-dap-virtual-text",
     "folke/which-key.nvim",
-    -- Add specific debuggers here as needed
-    -- { "mfussenegger/nvim-dap-python" },
-    { "leoluz/nvim-dap-go", config = function() require("dap-go").setup() end },
-    -- { "microsoft/vscode-node-debug2", build = "npm install --legacy-peer-deps", version = ">=1.20.0" },
+    {
+      "leoluz/nvim-dap-go",
+      config = function()
+        local function get_dlv_path()
+          local mise_dlv = vim.fn.trim(vim.fn.system "mise which dlv 2>/dev/null")
+          if vim.v.shell_error == 0 and mise_dlv ~= "" and vim.fn.executable(mise_dlv) == 1 then
+            return mise_dlv
+          end
+          if vim.fn.executable "dlv" == 1 then
+            return "dlv"
+          end
+          local go_bin_dlv = vim.fn.expand "~/go/bin/dlv"
+          if vim.fn.executable(go_bin_dlv) == 1 then
+            return go_bin_dlv
+          end
+          local mason_dlv = vim.fn.stdpath "data" .. "/mason/bin/dlv"
+          if vim.fn.executable(mason_dlv) == 1 then
+            return mason_dlv
+          end
+          return "dlv"
+        end
+
+        require("dap-go").setup {
+          delve = {
+            path = get_dlv_path(),
+            initialize_timeout_sec = 20,
+          },
+        }
+      end,
+    },
   },
 }
 
@@ -39,6 +65,9 @@ function M.config()
     { "<leader>dl", "<cmd>DapSetLogLevel<CR>", desc = "Set log level" },
     { "<leader>dL", "<cmd>DapShowLog<CR>", desc = "Show log" },
     { "<leader>du", "<cmd>lua require('dapui').toggle()<CR>", desc = "DAP UI" },
+    { "<leader>dg", group = "Go Debug" },
+    { "<leader>dgt", function() require("dap-go").debug_test() end, desc = "Debug Go Test" },
+    { "<leader>dgl", function() require("dap-go").debug_last_test() end, desc = "Debug Last Go Test" },
   }
 
   vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint" })
@@ -96,7 +125,6 @@ function M.config()
     local ok, debugger_settings = pcall(require, "user.dapsettings." .. server)
     if ok and debugger_settings then
       if debugger_settings.adapter then
-        -- Special case for go: register the adapter as 'go'
         if server == "delve" then
           dap.adapters["go"] = debugger_settings.adapter
         else
@@ -104,9 +132,8 @@ function M.config()
         end
       end
       if debugger_settings.configurations then
-        -- Merge configurations for different languages
         for lang, configs in pairs(debugger_settings.configurations) do
-          dap.configurations[lang] = configs
+          dap.configurations[lang] = vim.list_extend(dap.configurations[lang] or {}, configs)
         end
       end
     end

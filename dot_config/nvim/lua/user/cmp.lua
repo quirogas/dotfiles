@@ -23,6 +23,10 @@ local M = {
       event = "InsertEnter",
     },
     {
+      "hrsh7th/cmp-calc",
+      event = "InsertEnter",
+    },
+    {
       "saadparwaiz1/cmp_luasnip",
       event = "InsertEnter",
     },
@@ -42,8 +46,11 @@ local M = {
 function M.config()
   local cmp = require "cmp"
   local luasnip = require "luasnip"
+  local config_path = vim.fn.stdpath "config"
+
   require("luasnip.loaders.from_vscode").lazy_load()
-  require("luasnip.loaders.from_lua").load { paths = { "~/.config/nvim/snippets" } }
+  require("luasnip.loaders.from_vscode").lazy_load { paths = { config_path .. "/snippets" } }
+  require("luasnip.loaders.from_lua").load { paths = { config_path .. "/snippets" } }
 
   vim.api.nvim_set_hl(0, "CmpItemKindEmoji", { fg = "#FDE030" })
 
@@ -110,11 +117,13 @@ function M.config()
       format = function(entry, vim_item)
         vim_item.kind = icons.kind[vim_item.kind]
         vim_item.menu = ({
+          lazydev = "",
           nvim_lsp = "",
           nvim_lua = "",
           luasnip = "",
           buffer = "",
           path = "",
+          calc = "",
           emoji = "",
         })[entry.source.name]
 
@@ -127,6 +136,7 @@ function M.config()
       end,
     },
     sources = {
+      { name = "lazydev", group_index = 0 },
       { name = "nvim_lsp" },
       { name = "luasnip" },
       { name = "nvim_lua" },
