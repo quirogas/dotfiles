@@ -1,0 +1,22 @@
+# Brewfile - macOS packages and applications managed by Chezmoi
+
+tap "homebrew/bundle"
+
+# CLI Tools and Libraries
+brew "git"
+brew "docker"
+brew "tree"
+brew "chafa"
+brew "imagemagick"
+brew "ghostscript"
+brew "poppler"
+brew "direnv"
+brew "chezmoi"
+brew "mise"
+
+# macOS Applications
+cask "spotify"
+cask "firefox"
+cask "rectangle"
+cask "warp"
+cask "dropbox"

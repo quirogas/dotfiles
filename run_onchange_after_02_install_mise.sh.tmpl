@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euo pipefail
+
+# mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+
+if ! command -v mise >/dev/null 2>&1; then
+    echo "Installing mise..."
+    curl -fsSL https://mise.run | sh
+fi
+
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/bin:$PATH"
+
+if command -v mise >/dev/null 2>&1; then
+    echo "Installing and updating runtimes/tools via mise..."
+    mise install -y
+fi
