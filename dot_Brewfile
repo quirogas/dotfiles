@@ -13,6 +13,7 @@ brew "poppler"
 brew "direnv"
 brew "chezmoi"
 brew "mise"
+brew "pipx"
 
 # macOS Applications
 cask "spotify"

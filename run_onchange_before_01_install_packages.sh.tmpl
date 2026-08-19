@@ -20,12 +20,13 @@ brew bundle --file="{{ .chezmoi.sourceDir }}/dot_Brewfile" --no-lock || true
 {{ else if eq .chezmoi.os "linux" -}}
 if command -v apt-get >/dev/null 2>&1; then
     echo "Installing base packages on Linux/gLinux via apt..."
+    PACKAGES="git zsh curl build-essential ca-certificates unzip jq pkg-config libreadline-dev libncurses-dev libssl-dev zlib1g-dev pipx"
     if command -v sudo >/dev/null 2>&1; then
         sudo apt-get update -y || true
-        sudo apt-get install -y git zsh curl build-essential ca-certificates unzip jq pkg-config || true
+        sudo apt-get install -y $PACKAGES || true
     else
         apt-get update -y || true
-        apt-get install -y git zsh curl build-essential ca-certificates unzip jq pkg-config || true
+        apt-get install -y $PACKAGES || true
     fi
 fi
 {{ end -}}
