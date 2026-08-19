@@ -1,5 +1,4 @@
 [tools]
-cargo = "latest"
 fd = "latest"
 fzf = "latest"
 go = "latest"
